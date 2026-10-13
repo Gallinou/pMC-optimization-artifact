@@ -1,0 +1,4 @@
+output.csv
+Code/__pycache__
+Code/main
+*.DS_store
