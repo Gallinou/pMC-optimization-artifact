@@ -1,5 +1,5 @@
 # ---- Compiler & Flags ----
-CXX      ?= g++
+CXX      ?= g++ 
 CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra
 SRC       = Code/main.cpp
 HDRS      = $(wildcard Code/*.hpp)
@@ -14,7 +14,7 @@ else
 	TARGET = Code/main
 	UNAME := $(shell uname -s)
 	ifeq ($(UNAME),Darwin)
-		PREFIX ?= $(shell brew --prefix)
+                PREFIX ?= $(if $(CONDA_PREFIX),$(CONDA_PREFIX),$(shell brew --prefix))
 	else
 		PREFIX ?= /usr/local
 	endif
@@ -26,6 +26,9 @@ INCLUDES = -isystem $(PREFIX)/include \
            -isystem $(PREFIX)/include/eigen3 \
            -isystem /usr/include/eigen3
 LDFLAGS  = -L$(PREFIX)/lib
+ifeq ($(UNAME),Darwin)
+    LDFLAGS += -Wl,-rpath,$(PREFIX)/lib
+endif
 
 # ---- Rules ----
 all: $(TARGET)
